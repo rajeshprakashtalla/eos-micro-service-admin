@@ -1,4 +1,4 @@
-def label = "eosagent"
+def label = "any"
 def mvn_version = 'M2'
 podTemplate(label: label, yaml: """
 apiVersion: v1
@@ -26,7 +26,7 @@ spec:
 ) {
     node (label) {
         stage ('Checkout SCM'){
-          git credentialsId: 'git', url: 'https://dptrealtime@bitbucket.org/dptrealtime/eos-micro-services-admin.git', branch: 'master'
+          git credentialsId: 'git_key', url: 'https://github.com/rajeshprakashtalla/eos-micro-service-admin.git', branch: 'dev'
           container('build') {
                 stage('Build a Maven project') {
                   //withEnv( ["PATH+MAVEN=${tool mvn_version}/bin"] ) {
@@ -53,8 +53,8 @@ spec:
                 stage('Artifactory configuration') {
                     rtServer (
                     id: "jfrog",
-                    url: "https://eosartifact.jfrog.io/artifactory",
-                    credentialsId: "jfrog"
+                    url: "https://rajesh12345.jfrog.io/artifactory",
+                    credentialsId: "Jfrog"
                 )
 
                 rtMavenDeployer (
@@ -110,9 +110,9 @@ spec:
         stage ('Helm Chart') {
           container('build') {
             dir('charts') {
-              withCredentials([usernamePassword(credentialsId: 'jfrog', usernameVariable: 'username', passwordVariable: 'password')]) {
+              withCredentials([usernamePassword(credentialsId: 'Jfrog', usernameVariable: 'username', passwordVariable: 'password')]) {
               sh '/usr/local/bin/helm package micro-services-admin'
-              sh '/usr/local/bin/helm push-artifactory micro-services-admin-1.0.tgz https://eosartifact.jfrog.io/artifactory/eos-helm-local --username $username --password $password'
+              sh '/usr/local/bin/helm push-artifactory micro-services-admin-1.0.tgz https://rajesh12345.jfrog.io/artifactory/eos-helm-local --username $username --password $password'
               }
             }
         }
