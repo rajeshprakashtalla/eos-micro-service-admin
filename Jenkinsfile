@@ -11,7 +11,7 @@ metadata:
 spec:
   containers:
   - name: build
-    image: dpthub/eos-jenkins-agent-base:latest
+    image: rajeshtalla0209/jenkins:latest
     command:
     - cat
     tty: true
